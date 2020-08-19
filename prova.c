@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+#include <Windows.h>
+#else
 #include <unistd.h>
+#endif
 #include "utils.h"
 #define cleanScreen() printf("\e[1;1H\e[2J")
 
@@ -100,7 +104,11 @@ int main(int argc, char * argv[]) {
 			printf("%c", pointer[i]);
 			if (i % columns == columns-1) {printf("\n");}
 		}
+		#ifdef _WIN32
+		Sleep(1);
+		#else
 		sleep(1);
+		#endif
 	}
 	free(pointer);
 	free(temp);
