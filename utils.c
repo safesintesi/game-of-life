@@ -20,7 +20,13 @@ char * popola_random(int col, int row) {
 	return pointer;
 }
 
-char * popola_file(char const * const file, int * columns, int * rows) {
+int popola_file(char ** pointer, char const * const file, int * columns, int * rows) {
+
+    if ((pointer == NULL) || (file == NULL) || (columns == NULL) || (rows == NULL )) {
+        printf("Errore di puntatore");
+        exit(1);
+    }
+
     char * line;
     size_t len = 0;
     size_t read;
@@ -35,12 +41,11 @@ char * popola_file(char const * const file, int * columns, int * rows) {
     }
     if (fp) {
         while ((read = getline(&line, &len, fp)) != NOSIZE) {
-            if(read == 1) {continue;}
             col = read - 1;
 
             while (((row+1)*col) > size_buffer) {
                 size_buffer *= 2;
-                if ((buffer = (char *) realloc(buffer, size_buffer)) == NULL) {
+                if ((buffer = (char *) realloc(buffer, size_buffer + 1)) == NULL) {
                     printf("Errore di memoria");
                     exit(2);
                 }
@@ -51,6 +56,7 @@ char * popola_file(char const * const file, int * columns, int * rows) {
             }
 
             row++;
+            buffer[col*row] = '\0';
         }
         free(line);
         fclose(fp);        
@@ -68,44 +74,10 @@ char * popola_file(char const * const file, int * columns, int * rows) {
     *columns = col;
     *rows = row;
     
-    if (buffer = realloc(buffer, row*col) == NULL) {
+    if ((*pointer = realloc(buffer, row*col + 1)) == NULL) {
 		printf("Errore di memoria");
 		exit(1);
 	}
-    return buffer;
+    //*pointer[row*col] = '\0';
+    return row*col;
 }
-/*
-int main(int argc, char * argv[]) {
-    char * line;
-    size_t len = 0;
-    size_t read;
-    FILE * fp = fopen(argv[1], "r");
-    int col = 0;
-    int row = 0;
-    int size_buffer = 1;
-    char * pointer = malloc(size_pointer);
-    if (fp) {
-        while ((read = getline(&line, &len, fp)) != NOSIZE) {
-            col = read - 1;
-
-            while (((row+1)*col) > size_pointer) {
-                size_pointer *= 2;
-                pointer = realloc(pointer, size_pointer);
-            }
-
-            for (int i = 0; i < col; i++) {
-                pointer[col*row + i] = ((char) line[i] == '*');
-            }
-
-            row++;
-        }
-        pointer = realloc(pointer, col*row);
-
-        free(line);
-        free(pointer);
-        line = NULL;
-        fclose(fp);        
-    }
-    return 0;
-}
-*/

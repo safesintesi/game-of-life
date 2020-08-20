@@ -13,20 +13,22 @@ int main(int argc, char * argv[]) {
 	cleanScreen();
 
 	//valori standard per creazione random
-	int columns = 140;
-	int rows = 75;
+	int columns = 0;
+	int rows = 0;
 	int elements = columns*rows;
 	char * pointer;
+	size_t np = 0;
 	//char * temp = (char *) calloc(elements, sizeof(char));
 
 	//check for file
 	if (argc < 2) {
 		//manca file, popola la tabella base a random
+		columns = 15;
+		rows = 15;
 		pointer = popola_random(columns, rows);
 	} else {
 		//legge la tabella dal file e la carica
-		pointer = popola_file(argv[1], &columns, &rows);
-		elements = rows*columns;
+		elements = popola_file(&pointer, argv[1], &columns, &rows);
 	}	
 	char * temp;
 	if ((temp = (char *) calloc(elements, sizeof(char))) == NULL) {
@@ -78,13 +80,13 @@ int main(int argc, char * argv[]) {
 				}
 			}
 		}
-		
+		/*
 		for (int i = 0; i < elements; i++) {
 			printf("%d", temp[i]);
 			if (i % columns == columns-1) {printf("\n");}
 		}
 		printf("\n");
-		
+		*/
 		//decide vita, morte e miracoli
 		sent = 0;
 		for (int i = 0; i < elements; i++) {
