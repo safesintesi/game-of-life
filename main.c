@@ -46,6 +46,7 @@ int main(int argc, char * argv[]) {
 		//legge la tabella dal file e la carica
 		elements = popola_file(&pointer, argv[1], &columns, &rows);
 	}
+	stampa_tabella(pointer, elements, columns);
 
 	// Alloca la memoria per la tabella di supporto dove verrano calolati i vicini per ogni cella
 	char * temp;

@@ -79,7 +79,6 @@ int popola_file(char ** pointer, char const * const file, int * columns, int * r
 		printf("Errore di memoria");
 		exit(1);
 	}
-    free(buffer);
     return row*col;
 }
 
