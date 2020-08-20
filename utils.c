@@ -1,3 +1,7 @@
+/**
+ * @file utils.c
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -22,6 +26,7 @@ char * popola_random(int col, int row) {
 
 int popola_file(char ** pointer, char const * const file, int * columns, int * rows) {
 
+    // Controllo puntatori non nulli.
     if ((pointer == NULL) || (file == NULL) || (columns == NULL) || (rows == NULL )) {
         printf("Errore di puntatore");
         exit(1);
@@ -40,17 +45,19 @@ int popola_file(char ** pointer, char const * const file, int * columns, int * r
         exit(1);
     }
     if (fp) {
-        while ((read = getline(&line, &len, fp)) != NOSIZE) {
+        while ((read = (size_t) getline(&line, &len, fp)) != NOSIZE) {
             col = read - 1;
 
-            while (((row+1)*col) > size_buffer) {
+            // Amplia dimensioni buffer nel caso non basti
+            while (((row+1)*col) >= size_buffer) {
                 size_buffer *= 2;
                 if ((buffer = (char *) realloc(buffer, size_buffer + 1)) == NULL) {
                     printf("Errore di memoria");
-                    exit(2);
+                    exit(1);
                 }
             }
 
+            // Copia la linea letta nel buffer
             for (int i = 0; i < col; i++) {
                 buffer[col*row + i] = ((char) line[i]);
             }
@@ -65,12 +72,6 @@ int popola_file(char ** pointer, char const * const file, int * columns, int * r
         printf("File non trovato");
         exit(1);
     }
-    /*
-    if ((*tablepointer = realloc(buffer, col*row)) == NULL) {
-        printf("nope");
-        exit(1);
-    }*/
-    //free(buffer);
     *columns = col;
     *rows = row;
     
@@ -78,6 +79,14 @@ int popola_file(char ** pointer, char const * const file, int * columns, int * r
 		printf("Errore di memoria");
 		exit(1);
 	}
-    //*pointer[row*col] = '\0';
+    free(buffer);
     return row*col;
+}
+
+void stampa_tabella(char * pointer, size_t np, int col) {
+    for (int i = 0; i < np; i++) {
+        printf("%c", pointer[i]);
+        if (i % col == col-1) {printf("\n");}
+    }
+    printf("\n");
 }

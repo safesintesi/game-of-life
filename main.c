@@ -1,24 +1,40 @@
+/**
+ * @file main.c
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #ifdef _WIN32
 #include <Windows.h>
+#define CLEAR_SCREEN() system("cls")
 #else
 #include <unistd.h>
+#define CLEAR_SCREEN() printf("\e[1;1H\e[2J")
 #endif
 #include "utils.h"
-#define cleanScreen() printf("\e[1;1H\e[2J")
 
+///Funzione main che implementa il gioco
+/**
+ * Chiede in input un file contenente una tabella e cicla per calcolare i prossimi stati del gioco.
+ * Nel caso il file non sia passato come argomento viene creata una tabella casuale tramite
+ * la funzione popola_random().
+ * Dopodichè crea una tabella di supporto temp della stessa dimensione per calcolare i vicini vivi.
+ * Inizia a ciclare:
+ * - Azzera la tabella
+ * - Calcola i vicini vivi per ogni cella
+ * - Decide se allo stato successivo la cella nasce, vive o muore
+ * - Stampa il risultato
+ * 
+ * \var
+ */
 int main(int argc, char * argv[]) {
-	cleanScreen();
+	CLEAR_SCREEN();
 
 	//valori standard per creazione random
 	int columns = 0;
 	int rows = 0;
-	int elements = columns*rows;
+	size_t elements = columns*rows;
 	char * pointer;
-	size_t np = 0;
-	//char * temp = (char *) calloc(elements, sizeof(char));
 
 	//check for file
 	if (argc < 2) {
@@ -29,7 +45,9 @@ int main(int argc, char * argv[]) {
 	} else {
 		//legge la tabella dal file e la carica
 		elements = popola_file(&pointer, argv[1], &columns, &rows);
-	}	
+	}
+
+	// Alloca la memoria per la tabella di supporto dove verrano calolati i vicini per ogni cella
 	char * temp;
 	if ((temp = (char *) calloc(elements, sizeof(char))) == NULL) {
 		printf("Errore di memoria");
@@ -37,13 +55,17 @@ int main(int argc, char * argv[]) {
 	}
 
 	_Bool sent = 1;
+	// Il gioco non prevede una fine ma se non ci sono cambiamenti tra
+	// un'iterazzione e la successiva tanto vale fermarsi
 	while (sent) {
-		cleanScreen();
+		CLEAR_SCREEN();
+
+		// La tabella di supporto viene ripulita
 		for (int i = 0; i < elements; i++) {
-			i[temp] = 0; //giusto perche si
+			i[temp] = 0; //proprietà commutativa lol
 		}
 
-		//calc vicini vivi
+		// Calcolo vicini vivi per ogni cella
 		for (int i = 0; i<elements; i++) {
 			if (pointer[i] == '*') {
 				//verso su
@@ -80,14 +102,8 @@ int main(int argc, char * argv[]) {
 				}
 			}
 		}
-		/*
-		for (int i = 0; i < elements; i++) {
-			printf("%d", temp[i]);
-			if (i % columns == columns-1) {printf("\n");}
-		}
-		printf("\n");
-		*/
-		//decide vita, morte e miracoli
+		
+		// Decide vita, morte e miracoli
 		sent = 0;
 		for (int i = 0; i < elements; i++) {
 			switch (temp[i])
@@ -103,11 +119,12 @@ int main(int argc, char * argv[]) {
 				sent = 1;
 				break;
 			}
-			printf("%c", pointer[i]);
-			if (i % columns == columns-1) {printf("\n");}
 		}
+
+		// Stampa la tabella risultante in console
+		stampa_tabella(pointer, elements, columns);
 		#ifdef _WIN32
-		Sleep(1);
+		Sleep(1000);
 		#else
 		sleep(1);
 		#endif
