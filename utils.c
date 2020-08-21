@@ -1,5 +1,7 @@
 /**
  * @file utils.c
+ * File contenente le funzioni di popolazione della tabella e stampa.
+ * 
  */
 
 #include <stdio.h>
@@ -11,10 +13,12 @@
 char * popola_random(int col, int row) {
 	srand(time(0));
     char * pointer;
+    // Controlla l'allocazione sia andata a buon fine
 	if ((pointer = (char *) calloc(col*row, sizeof(char))) == NULL) {
         printf("Popolazione random fallita");
         exit(1);
     }
+    // Popola in maniera randomica
 	for (int i=0; i<col*row; i++) {
 		pointer[i] = rand() % 2;
 		printf("%d", i[pointer]);
@@ -40,6 +44,7 @@ int popola_file(char ** pointer, char const * const file, int * columns, int * r
     int row = 0;
     int size_buffer = CHUNCK;
     char * buffer;
+    // Controlla l'allocazione sia andata a buon fine
     if ((buffer = (char *) malloc(size_buffer)) == NULL) {
         printf("Errore 01: memoria insufficiente");
         exit(1);
@@ -69,12 +74,14 @@ int popola_file(char ** pointer, char const * const file, int * columns, int * r
         fclose(fp);        
     } else
     {
+        // File inesistente
         printf("File non trovato");
         exit(1);
     }
     *columns = col;
     *rows = row;
     
+    // Controlla l'allocazione sia andata a buon fine
     if ((*pointer = realloc(buffer, row*col + 1)) == NULL) {
 		printf("Errore di memoria");
 		exit(1);

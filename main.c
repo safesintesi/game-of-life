@@ -1,5 +1,7 @@
 /**
  * @file main.c
+ * File principale del programma.
+ * 
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,8 +15,9 @@
 #endif
 #include "utils.h"
 
-///Funzione main che implementa il gioco
 /**
+ * Funzione main che implementa il gioco
+ *
  * Chiede in input un file contenente una tabella e cicla per calcolare i prossimi stati del gioco.
  * Nel caso il file non sia passato come argomento viene creata una tabella casuale tramite
  * la funzione popola_random().
@@ -25,7 +28,9 @@
  * - Decide se allo stato successivo la cella nasce, vive o muore
  * - Stampa il risultato
  * 
- * \var
+ * @param argv contiene il nome del file input in ingresso
+ * @param pointer Memoria dove sono salvate le celle attive
+ * @param temp Memoria per il calcolo dei vicini, ciclicamente azzerata
  */
 int main(int argc, char * argv[]) {
 	CLEAR_SCREEN();
@@ -34,7 +39,7 @@ int main(int argc, char * argv[]) {
 	int columns = 0;
 	int rows = 0;
 	size_t elements = columns*rows;
-	char * pointer;
+	char * pointer; /* Puntatore alla tabella di gioco */
 
 	//check for file
 	if (argc < 2) {
@@ -49,8 +54,8 @@ int main(int argc, char * argv[]) {
 	stampa_tabella(pointer, elements, columns);
 
 	// Alloca la memoria per la tabella di supporto dove verrano calolati i vicini per ogni cella
-	char * temp;
-	if ((temp = (char *) calloc(elements, sizeof(char))) == NULL) {
+	char * temp;	/* Puntatore alla tabella per calcoli di supporto */
+	if ((temp = (char *) calloc(elements + 1, sizeof(char))) == NULL) {
 		printf("Errore di memoria");
 		exit(1);
 	}
