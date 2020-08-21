@@ -46,6 +46,7 @@ int main(int argc, char * argv[]) {
 		//manca file, popola la tabella base a random
 		columns = 15;
 		rows = 15;
+		elements = columns*rows;
 		pointer = popola_random(columns, rows);
 	} else {
 		//legge la tabella dal file e la carica

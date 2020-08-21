@@ -14,17 +14,18 @@ char * popola_random(int col, int row) {
 	srand(time(0));
     char * pointer;
     // Controlla l'allocazione sia andata a buon fine
-	if ((pointer = (char *) calloc(col*row, sizeof(char))) == NULL) {
+	if ((pointer = (char *) calloc(col*row + 1, sizeof(char))) == NULL) {
         printf("Popolazione random fallita");
         exit(1);
     }
     // Popola in maniera randomica
 	for (int i=0; i<col*row; i++) {
-		pointer[i] = rand() % 2;
-		printf("%d", i[pointer]);
+		pointer[i] = (rand() % 2) ? '*' : '-';
+		printf("%c", i[pointer]);
 		if (i % col == col - 1) {printf("\n");}
 	}
 	printf("\n");
+    pointer[col*row] = '\0';
 	return pointer;
 }
 
