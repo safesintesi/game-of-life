@@ -5,14 +5,6 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef _WIN32
-#include <Windows.h>
-#define CLEAR_SCREEN() system("cls")
-#else
-#include <unistd.h>
-#define CLEAR_SCREEN() printf("\e[1;1H\e[2J")
-#endif
 #include "utils.h"
 
 /**
