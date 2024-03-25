@@ -47,10 +47,11 @@ void stampa_tabella(char *pointer, size_t np, int col);
 #ifdef _WIN32
 #include <Windows.h>
 #define CLEAR_SCREEN() system("cls")
+#define SLEEP() Sleep(1000)
 #else
 #include <unistd.h>
 #define CLEAR_SCREEN() printf("\e[1;1H\e[2J")
+#define SLEEP() sleep(1)
 #endif
 
 #endif
-
